@@ -1,0 +1,13 @@
+<section>
+    <div *ngIf="assessments">
+        <div *ngFor="let assessment of assessments" class="card w-50">
+            <div class="card-body">
+                <nz-tag class="mb-1" [nzColor]="assessment.status === 1 ? 'green' : 'volcano'">{{assessment.status === 1 ? 'Completed': 'Not taken'}}</nz-tag>
+              <h5 class="card-title">{{assessment.description}}</h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/assessment', assessment.assessment_id]" class="btn btn-pry btn-sm ml-auto">{{assessment.status === 1 ? 'View': 'Take Test'}}</a>
+              </div>
+            </div>
+          </div>
+    </div>
+</section>

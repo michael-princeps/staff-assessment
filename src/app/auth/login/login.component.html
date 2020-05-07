@@ -1,0 +1,38 @@
+<section class="container">
+  <div class="page-content">
+    <div class="form-wrapper">
+      <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+        <h1 class="colorLink headFont text-center">Hi,</h1>
+        <p class="gray text-center">Kindly provide your email and password to access portal</p>
+        <br />
+        <br />
+        <div class="form-group">
+          <p class="small">Email</p>
+          <input type="text" class="form-control form-control-lg" formControlName="email">
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+            <small *ngIf="email.errors.required">
+              Email is required.
+            </small>
+            <small *ngIf="email.errors.email">
+              Enter valid email.
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <p class="small">Password</p>
+          <input type="password" class="form-control form-control-lg" formControlName="password">
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+            <small *ngIf="password.errors.required">
+              Please put your password
+            </small>
+          </div>
+        </div>
+        <a [routerLink]="['/auth/forgot-password']" class="color1 float-right">Forgot Password?</a>
+        <br />
+        <br />
+        <button class="btn btn-lg btn-block text-white" type="submit" [disabled]="loading || loginForm.invalid">{{loading ? 'Logging in' : 'Log
+            In'}}</button>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,98 @@
+<!-- <section>
+  <nav class="navbar navbar-light bg-light ">
+        <div class="container justify-content-between">
+          <a class="navbar-brand">Navbar</a>
+          <div>
+            <button *ngIf="!showTimer" class="btn btn-lg" (click)="startTimer()">
+                Start
+            </button>
+           <div *ngIf="showTimer" class="timer"  [class]="timer === 'expired' ? 'red' : timer < '04:00' ? 'red' : 'green'" >
+            <span >
+                {{(timer ? timer : '05:00') | titlecase}}
+              </span>
+           </div>
+          </div>
+        </div>
+      </nav>
+  <div class="container">
+   <div *ngIf="assessments">
+    <p class="lead"><strong>Find your questions below. Click submit below when done</strong></p>
+    <div *ngFor="let test of assessments; let i = index">
+      <div class="row my-2">
+        <div class="col-1">
+          Q{{i+1}}
+        </div>
+        <div class="col-11">
+          <div class="row">
+            <div class="col">
+              {{test.question}}
+            </div>
+          </div>
+          <div class="row my-2" (change)="selectAnswer($event, test.id)">
+            <div *ngFor="let answer of test.answers | keyvalue; let ind = index" class="col-sm-12 col-md-6 col-lg-3">
+              <div class="form-check">
+                <input type="radio" name="answers{{i+1}}" [value]="answer.key" class="form-check-input"
+                  id="Q{{i+1}}answer{{ind+1}}">
+                <label class="form-check-label" for="Q{{i+1}}answer{{ind+1}}">{{answer.value}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mt-5 w-25 float-right">
+      <button class="btn btn-lg btn-pry btn-block" (click)="submit()">
+        Submit
+      </button>
+    </div>
+   </div>
+   <div *ngIf="expiredTest">
+    <p>{{expiredTest}}</p>
+   </div>
+  </div>
+
+</section> -->
+
+<div class="questions_wrapper">
+    <!-- <nz-steps [nzCurrent]="current">
+        <nz-step *ngFor="let questions of allQuestions; let i = index" [nzTitle]="i+1"></nz-step>
+      </nz-steps> -->
+      
+    <div class="steps-content mt-4">
+        <p>Question {{current+1}} of {{allQuestions.length}}</p>
+        <div *ngFor="let test of allQuestions; let i = index">
+        <ng-container *ngIf="current === i">
+            <div class="row my-2">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col">
+                      <p class="text-left question_title"><strong>{{test.question}}</strong></p>
+                    </div>
+                  </div>
+                  <div class="row flex-column my-3" (change)="selectAnswer($event, test.id)">
+                    <div *ngFor="let answer of test.answers | keyvalue; let ind = index" class="col-12 text-left">
+                      <div class="form-check">
+                        <input type="radio" [checked]="checkDefault(i, answer.key)" name="answers{{i+1}}" [value]="answer.key" class="form-check-input"
+                          id="Q{{i+1}}answer{{ind+1}}">
+                        <label class="form-check-label" [ngClass]="{selectedAnswer: checkDefault(i, answer.key)}" for="Q{{i+1}}answer{{ind+1}}">{{answer.value}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </ng-container>
+        </div>
+    </div>
+    <div class="steps-action">
+      <button nz-button nzType="default" (click)="pre()"  *ngIf="current > 0">
+        <span>Previous</span>
+      </button>
+      <button nz-button nzType="default" (click)="next()" *ngIf="current < allQuestions.length - 1">
+        <span>Next</span>
+      </button>
+      <!-- <button nz-button nzType="primary"  *ngIf="current === allQuestions.length -1">
+        <span>Done</span>
+      </button> -->
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<!-- <nz-layout class="layout">
+    <nz-sider nzWidth="300px">
+        <div class="logo">
+            <img src="../../assets/images/icon.png" alt="Credit Wallet Logo">
+            <span>Credit Wallet</span>
+        </div>
+        <ul nz-menu nzTheme="dark" nzMode="inline">
+          <li nz-menu-item [routerLink]="['/dashboard']" routerLinkActive="ant-menu-item-selected" >
+            <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+            <span>Dashboard</span>
+          </li>
+          <li nz-menu-item [routerLink]="['/assessment']" routerLinkActive="ant-menu-item-selected" >
+            <i nz-icon nzType="file-text" nzTheme="outline"></i>
+            <span>Assessments</span>
+          </li>
+        </ul>
+      </nz-sider>
+    <nz-layout class="right-layout">
+        <nz-header>
+           <div class="d-flex justify-content-between align-items-center">
+               <div>
+                    <p class="m-0">Welcome, {{firstname}} {{lastname}}</p>
+               </div>
+               <button (click)="logout()" nz-button nzType="default" class="d-flex align-items-center">Log Out <i nz-icon nzType="logout" nzTheme="outline"></i></button>
+           </div>
+          </nz-header>
+      <nz-content>
+        <router-outlet></router-outlet>
+      </nz-content>
+    </nz-layout>
+  </nz-layout> -->
+<nz-layout class="overflow-auto">
+    <nz-header>
+        <div class="lineHeight1 d-flex justify-content-between align-items-center">
+            <div>
+                 <p class="m-0">Welcome, <strong>{{firstname}} {{lastname}}</strong></p>
+            </div>
+            <button (click)="logout()" nz-button nzType="default" class="d-flex align-items-center">Log Out <i nz-icon nzType="logout" nzTheme="outline"></i></button>
+        </div>
+       </nz-header>
+    <nz-content class="container my-3 overflow-auto">
+        <main>
+            <h1 class="text-pry font-bold text-center mb-2 mt-3">Assessment</h1>
+            <div class="inner-content">
+              <nz-steps [nzCurrent]="current">
+                <nz-step nzTitle="Assessment"></nz-step>
+                <nz-step nzTitle="Questions"></nz-step>
+                <nz-step nzTitle="Score"></nz-step>
+              </nz-steps>
+        
+              <div class="steps-content">
+                <ng-container *ngIf="current === 0">
+                  <div *ngIf="assessments" class="d-flex h-100 justify-content-center align-items-center">
+                    <div *ngFor="let assessment of assessments" class="card w-50">
+                      <div class="card-body">
+                        <!-- <nz-tag class="mb-1" [nzColor]="assessment.status === 1 ? 'green' : 'volcano'">{{assessment.status === 1 ? 'Completed': 'Not taken'}}</nz-tag> -->
+                        <h5 class="card-title">{{assessment.description}}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <!-- <a [routerLink]="['/assessment', assessment.assessment_id]" class="btn btn-pry btn-sm ml-auto">{{assessment.status === 1 ? 'View': 'Take Test'}}</a> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="current === 1">
+                  <app-questions [allQuestions]="questions"></app-questions>
+                </ng-container>
+                <ng-container *ngIf="current === 2">
+                  <nz-result nzStatus="success" nzTitle="{{result? result.score: '0'}}%" nzSubTitle="Your score">
+                  </nz-result>
+                </ng-container>
+              </div>
+              <div *ngIf="!submitted" class="steps-action d-flex justify-content-between">
+                <button class="d-flex align-items-center" nz-button nzSize="large" nzType="default" (click)="pre()" *ngIf="current > 0">
+                  <i nz-icon nzType="left"></i>
+                  <span>Previous</span>
+                </button>
+                <ng-container *ngIf="assessments.length">
+                  <button class="mt-sm-2 ml-md-auto d-flex align-items-center" nz-button [nzLoading]="isLoading" nzSize="large"
+                    nzType="default" (click)="next()" *ngIf="current < 2">
+                    <span>{{current === 0? 'Take Test' : 'Submit'}}</span>
+                    <i nz-icon nzType="right"></i>
+                  </button>
+                </ng-container>
+                <button class="mt-sm-2 ml-md-auto" nz-button [nzLoading]="isLoading" nzSize="large" nzType="primary"
+                  (click)="done()" *ngIf="current === 2">
+                  <span>Done</span>
+                </button>
+              </div>
+            </div>
+          </main>
+    </nz-content>
+</nz-layout>

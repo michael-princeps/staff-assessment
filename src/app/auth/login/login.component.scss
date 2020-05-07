@@ -1,0 +1,28 @@
+section {
+  height: 100vh;
+
+  .page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .form-wrapper {
+      max-width: 500px;
+      margin: auto;
+      width: 100%;
+      background: white;
+      -webkit-box-shadow: 0px 0px 5px 2px rgba(204,204,204,1);
+      -moz-box-shadow: 0px 0px 5px 2px rgba(204,204,204,1);
+      box-shadow: 0px 0px 5px 2px rgba(204,204,204,1);
+      border-radius: 1rem;
+      padding: 4rem;
+
+      form{
+          button{
+              background-color: #f56b2a;
+          }
+      }
+    }
+  }
+}

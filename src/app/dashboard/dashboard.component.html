@@ -1,0 +1,31 @@
+<section>
+  <ng-container *ngIf="result">
+    <div class="row">
+        <div class="col-8">
+            <nz-result [nzTitle]="result.current_percentage">
+                <div nz-result-content>
+                  <div class="desc text-center">
+                    <p nz-paragraph>
+                      Current Percentage
+                    </p>
+                  </div>
+                </div>
+              </nz-result>
+        </div>
+        <div class="col-4">
+            <p>Other Staff </p>
+           <div class="vh-100 overflow-auto">
+            <div *ngFor="let staff of result.other_staff" class="card mb-1">
+                <div class="card-body">
+                  <h5 class="card-title">{{staff.staff_name}}</h5>
+                  <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                  <div class="float-right">
+                      <p class="m-0">{{staff.current_percentage}}</p>
+                  </div>
+                </div>
+              </div>
+           </div>
+        </div>
+    </div>
+  </ng-container>
+</section>
