@@ -35,6 +35,13 @@
             <div>
                  <p class="m-0">Welcome, <strong>{{firstname}} {{lastname}}</strong></p>
             </div>
+            <div class="countdown">
+             <div *ngIf="showTimer" class="timer"  [class]="timer === 'expired' ? 'red' : timer < '04:00' ? 'red' : timer > '04:00' ? 'green' : ''" >
+              <span >
+                  {{timer | titlecase}}
+                </span>
+             </div>
+            </div>
             <button (click)="logout()" nz-button nzType="default" class="d-flex align-items-center">Log Out <i nz-icon nzType="logout" nzTheme="outline"></i></button>
         </div>
        </nz-header>
@@ -91,3 +98,18 @@
           </main>
     </nz-content>
 </nz-layout>
+
+<nz-modal
+[(nzVisible)]="showSubmitInfo"
+nzOkText="Ok"
+nzCancelText="Cancel"
+[nzFooter]="null"
+[nzClosable]="false"
+[nzKeyboard]="false"
+[nzMaskClosable]="false"
+>
+<div class="d-flex flex-column align-items-center justify-content-between">
+  <h5 class="text-center">Time has expired</h5>
+  <p class="text-center">Submitting your work now...</p>
+</div>
+</nz-modal>

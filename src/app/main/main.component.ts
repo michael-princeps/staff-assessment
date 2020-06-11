@@ -27,6 +27,7 @@ interface answer {
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+  timer;
   collapsed: boolean;
   confirmModal: NzModalRef;
   @ViewChild(QuestionsComponent) childComponent: QuestionsComponent;
@@ -40,13 +41,15 @@ export class MainComponent implements OnInit {
   questions: any[];
   submitted: boolean;
   result: any;
+  showTimer: boolean;
+  showSubmitInfo: boolean;
 
-   constructor(private service: AssessmentService, private loadingBar: LoadingBarService, private message: NzMessageService, private modal: NzModalService) {
+  constructor(private service: AssessmentService, private loadingBar: LoadingBarService, private message: NzMessageService, private modal: NzModalService) {
     this.firstname = sessionStorage.getItem('firstname');
     this.lastname = sessionStorage.getItem('lastname');
-   }
+  }
 
-   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
     if (this.current === 1) {
       const result = confirm('Changes you made will not be saved.');
       if (result) {
@@ -56,9 +59,9 @@ export class MainComponent implements OnInit {
     }
   }
 
-   ngOnInit(): void {
-     this.fetchAssessment();
-   }
+  ngOnInit(): void {
+    this.fetchAssessment();
+  }
 
   fetchAssessment() {
     this.loadingBar.start();
@@ -87,13 +90,13 @@ export class MainComponent implements OnInit {
       if (this.childComponent.answeredAll) {
         this.confirmModal = this.modal.confirm({
           nzTitle: 'Are you sure you are ready to submit?',
-          nzContent: 'When clicked the OK button, you can not make any changes again',
+          nzContent: 'When you click the OK button, you can not make any changes again',
           nzOnOk: () =>
-        this.childComponent.submit().then((data: any) => {
-          this.current += 1;
-          this.submitted = true;
-          this.result = data;
-        }).catch(() => this.message.error(''))
+            this.childComponent.submit().then((data: any) => {
+              this.current += 1;
+              this.submitted = true;
+              this.result = data;
+            }).catch(() => this.message.error(''))
         });
       } else {
         this.modal.warning({
@@ -109,6 +112,37 @@ export class MainComponent implements OnInit {
 
   }
 
+  startTimer() {
+    this.countdownTimer(600);
+    this.showTimer = true;
+  }
+  countdownTimer(duration: any) {
+    let timer = duration;
+    let minutes;
+    let seconds;
+    const interval = setInterval(() => {
+      minutes = Math.floor(timer / 60);
+      seconds = Math.floor(timer % 60);
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+      this.timer = minutes + ':' + seconds;
+      if (--timer < 0) {
+        clearInterval(interval);
+        this.timer = 'expired';
+        this.showSubmitInfo = true;
+        this.childComponent.answeredAll = true;
+        this.childComponent.submit().then((data: any) => {
+          this.current += 1;
+          this.submitted = true;
+          this.showSubmitInfo = false;
+          this.result = data;
+        }).catch(() => {
+          this.message.error('An error occured. Try again');
+          this.showSubmitInfo = false;
+        });
+      }
+    }, 1000);
+  }
   fetchQuestions(id) {
     this.loadingBar.start();
     this.isLoading = true;
@@ -120,13 +154,14 @@ export class MainComponent implements OnInit {
       const allAnswers = [];
       if (data.status === 'success') {
         this.current += 1;
+        this.startTimer();
         this.questions = data.assessments;
         this.questions.map((element, index) => {
           objectives.A = element.A;
           objectives.B = element.B;
           objectives.C = element.C;
           objectives.D = element.D;
-          element.answers = {...objectives};
+          element.answers = { ...objectives };
         });
       } else {
         this.isLoading = false;

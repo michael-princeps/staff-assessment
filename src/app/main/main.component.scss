@@ -62,6 +62,24 @@
             line-height: 1.5;
         }
     }
+
+    .countdown{
+      .timer{
+        padding: .5rem 1rem;
+        font-size: 1.25rem;
+        line-height: 1.5;
+        border-radius: .3rem;
+        color: white;
+        // background-color: green;
+       
+    } 
+    .timer.green{
+        background-color: green;
+    }
+    .timer.red{
+        background-color: maroon;
+    }
+    }
   }
   nz-layout{
     height: 100vh;
