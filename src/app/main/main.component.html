@@ -70,7 +70,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="current === 1">
-                  <app-questions [allQuestions]="questions"></app-questions>
+                  <app-questions [allQuestions]="questions" [testId]="testId"></app-questions>
                 </ng-container>
                 <ng-container *ngIf="current === 2">
                   <nz-result nzStatus="success" nzTitle="{{result? result.score: '0'}}%" nzSubTitle="Your score">

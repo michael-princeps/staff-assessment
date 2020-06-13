@@ -43,6 +43,7 @@ export class MainComponent implements OnInit {
   result: any;
   showTimer: boolean;
   showSubmitInfo: boolean;
+  testId: any;
 
   constructor(private service: AssessmentService, private loadingBar: LoadingBarService, private message: NzMessageService, private modal: NzModalService) {
     this.firstname = sessionStorage.getItem('firstname');
@@ -70,6 +71,7 @@ export class MainComponent implements OnInit {
       // console.log(data);
       if (data.status === 'success') {
         this.assessments = data.assessments;
+        this.testId = this.assessments[0].assessment_id;
       } else {
         this.message.error(data.message);
       }
@@ -85,7 +87,7 @@ export class MainComponent implements OnInit {
 
   next(): void {
     if (this.current === 0) {
-      this.fetchQuestions('april_2020');
+      this.fetchQuestions(this.testId);
     } else if (this.current === 1) {
       if (this.childComponent.answeredAll) {
         this.confirmModal = this.modal.confirm({
@@ -96,7 +98,7 @@ export class MainComponent implements OnInit {
               this.current += 1;
               this.submitted = true;
               this.result = data;
-            }).catch(() => this.message.error(''))
+            }).catch((err) => this.message.error(err.message ? err.message : 'An error has occured'))
         });
       } else {
         this.modal.warning({
@@ -154,8 +156,11 @@ export class MainComponent implements OnInit {
       const allAnswers = [];
       if (data.status === 'success') {
         this.current += 1;
-        this.startTimer();
+        
         this.questions = data.assessments;
+        if(this.questions.length) {
+          this.startTimer();
+        }
         this.questions.map((element, index) => {
           objectives.A = element.A;
           objectives.B = element.B;
@@ -170,6 +175,7 @@ export class MainComponent implements OnInit {
       }
     }, (err: any) => {
       this.loadingBar.stop();
+      this.isLoading = false;
       this.message.error('Error connecting to server, please check your internet connection and try again');
     });
   }

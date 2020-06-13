@@ -60,7 +60,8 @@
       </nz-steps> -->
       
     <div class="steps-content mt-4">
-        <p>Question {{current+1}} of {{allQuestions.length}}</p>
+        <ng-container *ngIf="allQuestions.length">
+          <p>Question {{current+1}} of {{allQuestions.length}}</p>
         <div *ngFor="let test of allQuestions; let i = index">
         <ng-container *ngIf="current === i">
             <div class="row my-2">
@@ -83,6 +84,12 @@
               </div>
         </ng-container>
         </div>
+        </ng-container>
+        <ng-container *ngIf="allQuestions.length === 0">
+          <div>
+            <p>No questions yet</p>
+          </div>
+        </ng-container>
     </div>
     <div class="steps-action">
       <button nz-button nzType="default" (click)="pre()"  *ngIf="current > 0">

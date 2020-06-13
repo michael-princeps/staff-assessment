@@ -25,6 +25,7 @@ interface answer {
 export class QuestionsComponent implements OnInit {
   timer;
   @Input() allQuestions: any[];
+  @Input() testId;
   current = 0;
   showTimer: boolean;
   assessments: Array<any>;
@@ -139,7 +140,7 @@ export class QuestionsComponent implements OnInit {
     this.loadingBar.start();
     // console.log(this.answers);
     return new Promise((resolve, reject) => {
-      this.service.submitAnswers('april_2020', this.answers).subscribe((data: any) => {
+      this.service.submitAnswers(this.testId, this.answers).subscribe((data: any) => {
         this.loadingBar.stop();
         // console.log(data);
         if (data.status === 'success') {
@@ -150,8 +151,9 @@ export class QuestionsComponent implements OnInit {
         }
       }, err => {
         this.loadingBar.stop();
+        // console.log(err);
         this.message.error('Error connecting to server, please check your internet connection and try again');
-        reject();
+        reject(err);
       });
     });
   }
